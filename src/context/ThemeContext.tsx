@@ -3,7 +3,7 @@ import useLocalStorage from "../hooks/useLocalStorage";
 
 const ThemeContext: any = createContext(null);
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
+export function ThemeProvider({ children }: any) {
   const [theme, setTheme] = useLocalStorage("theme", "light");
 
   function toggleTheme() {
@@ -14,16 +14,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
-  const value = { theme, toggleTheme };
-
   return (
-  <ThemeContext.Provider value={value}>
-    {children}
-  </ThemeContext.Provider>
-);
-
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
 }
 
 export function useTheme() {
-  return useContext(ThemeContext) as any;
+  return useContext(ThemeContext);
 }
