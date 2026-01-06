@@ -16,7 +16,7 @@ export default function CountryDetailPage() {
         setError("");
 
         const response = await fetch(
-          `https://restcountries.com/v3.1/alpha/${code}?fields=name,cca3,population,region,capital,flags`
+          `https://restcountries.com/v3.1/alpha/${code}?fields=name,cca3,population,region,capital,flags,borders`
         );
 
         if (!response.ok) {
@@ -24,8 +24,6 @@ export default function CountryDetailPage() {
         }
 
         const data = await response.json();
-
-        // The API sometimes returns an array, sometimes a single object.
         const result = Array.isArray(data) ? data[0] : data;
 
         setCountry(result);
@@ -49,6 +47,7 @@ export default function CountryDetailPage() {
   const population = country.population.toLocaleString();
   const region = country.region;
   const capital = country.capital?.[0] ?? "N/A";
+  const borders = country.borders ?? [];
 
   return (
     <div style={{ padding: 24 }}>
@@ -71,7 +70,41 @@ export default function CountryDetailPage() {
       <p>
         <strong>Capital:</strong> {capital}
       </p>
+
+      <div style={{ marginTop: 24 }}>
+        <strong>Border Countries:</strong>
+
+        {borders.length === 0 ? (
+          <p>None</p>
+        ) : (
+          <div
+            style={{
+              display: "flex",
+              gap: 8,
+              flexWrap: "wrap",
+              marginTop: 8,
+            }}
+          >
+            {borders.map((border) => (
+              <Link
+                key={border}
+                to={`/country/${border}`}
+                style={{
+                  padding: "6px 12px",
+                  border: "1px solid #333",
+                  borderRadius: 4,
+                  textDecoration: "none",
+                  color: "inherit",
+                }}
+              >
+                {border}
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
+
 
