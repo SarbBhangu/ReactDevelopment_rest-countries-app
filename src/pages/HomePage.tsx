@@ -38,7 +38,6 @@ export default function HomePage() {
     fetchCountries();
   }, []);
 
-  // Filter countries based on search + region
   const filteredCountries = countries.filter((country) => {
     const matchesSearch = country.name.common
       .toLowerCase()
