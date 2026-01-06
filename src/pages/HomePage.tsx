@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import CountryCard from "../components/CountryCard";
 import SearchBar from "../components/SearchBar";
+import RegionFilter from "../components/RegionFilter";
 import type { Country } from "../types/country";
 
 export default function HomePage() {
@@ -9,6 +10,7 @@ export default function HomePage() {
   const [error, setError] = useState("");
 
   const [search, setSearch] = useState("");
+  const [region, setRegion] = useState("");
 
   useEffect(() => {
     async function fetchCountries() {
@@ -36,24 +38,41 @@ export default function HomePage() {
     fetchCountries();
   }, []);
 
-  const filteredCountries = countries.filter((country) =>
-    country.name.common.toLowerCase().includes(search.toLowerCase())
-  );
+  // Filter countries based on search + region
+  const filteredCountries = countries.filter((country) => {
+    const matchesSearch = country.name.common
+      .toLowerCase()
+      .includes(search.toLowerCase());
 
-  if (loading) {
-    return <p style={{ padding: 24 }}>Loading countries...</p>;
-  }
+    const matchesRegion = region ? country.region === region : true;
 
-  if (error) {
-    return <p style={{ padding: 24 }}>Error: {error}</p>;
-  }
+    return matchesSearch && matchesRegion;
+  });
+
+  if (loading) return <p style={{ padding: 24 }}>Loading countries...</p>;
+  if (error) return <p style={{ padding: 24 }}>Error: {error}</p>;
 
   return (
     <div style={{ padding: 24 }}>
       <h1>Where in the world?</h1>
-      <p>Countries loaded: {countries.length}</p>
 
-      <SearchBar value={search} onChange={setSearch} />
+      <div
+        style={{
+          display: "flex",
+          gap: 16,
+          flexWrap: "wrap",
+          alignItems: "center",
+          marginTop: 12,
+        }}
+      >
+        <SearchBar value={search} onChange={setSearch} />
+        <RegionFilter value={region} onChange={setRegion} />
+      </div>
+
+      <p style={{ marginTop: 12 }}>
+        Showing {Math.min(filteredCountries.length, 20)} of{" "}
+        {filteredCountries.length} results
+      </p>
 
       <div
         style={{
@@ -70,5 +89,6 @@ export default function HomePage() {
     </div>
   );
 }
+
 
 
