@@ -1,3 +1,8 @@
 export default function HomePage() {
-  return <h1>Home Page</h1>;
+  return (
+    <div style={{ padding: "24px" }}>
+      <h1>Where in the world?</h1>
+      <p>Home page is working.</p>
+    </div>
+  );
 }
