@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import CountryCard from "../components/CountryCard";
+import SearchBar from "../components/SearchBar";
 import type { Country } from "../types/country";
 
 export default function HomePage() {
   const [countries, setCountries] = useState<Country[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     async function fetchCountries() {
@@ -33,6 +36,10 @@ export default function HomePage() {
     fetchCountries();
   }, []);
 
+  const filteredCountries = countries.filter((country) =>
+    country.name.common.toLowerCase().includes(search.toLowerCase())
+  );
+
   if (loading) {
     return <p style={{ padding: 24 }}>Loading countries...</p>;
   }
@@ -46,6 +53,8 @@ export default function HomePage() {
       <h1>Where in the world?</h1>
       <p>Countries loaded: {countries.length}</p>
 
+      <SearchBar value={search} onChange={setSearch} />
+
       <div
         style={{
           display: "grid",
@@ -54,11 +63,12 @@ export default function HomePage() {
           marginTop: 24,
         }}
       >
-        {countries.slice(0, 20).map((country) => (
+        {filteredCountries.slice(0, 20).map((country) => (
           <CountryCard key={country.cca3} country={country} />
         ))}
       </div>
     </div>
   );
 }
+
 
