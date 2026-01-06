@@ -26,7 +26,7 @@ export default function HomePage() {
           throw new Error("Failed to fetch countries");
         }
 
-        const data = await response.json();
+        const data: Country[] = await response.json();
         setCountries(data);
       } catch (err: any) {
         setError(err.message || "Something went wrong");
@@ -48,39 +48,31 @@ export default function HomePage() {
     return matchesSearch && matchesRegion;
   });
 
-  if (loading) return <p style={{ padding: 24 }}>Loading countries...</p>;
-  if (error) return <p style={{ padding: 24 }}>Error: {error}</p>;
+  if (loading) {
+    return <p className="page-container">Loading countries...</p>;
+  }
+
+  if (error) {
+    return <p className="page-container">Error: {error}</p>;
+  }
 
   return (
-    <div style={{ padding: 24 }}>
+    <div className="page-container">
       <h1>Where in the world?</h1>
 
-      <div
-        style={{
-          display: "flex",
-          gap: 16,
-          flexWrap: "wrap",
-          alignItems: "center",
-          marginTop: 12,
-        }}
-      >
+      {/* Search + Filter */}
+      <div className="filters-row">
         <SearchBar value={search} onChange={setSearch} />
         <RegionFilter value={region} onChange={setRegion} />
       </div>
 
-      <p style={{ marginTop: 12 }}>
+      <p className="results-text">
         Showing {Math.min(filteredCountries.length, 20)} of{" "}
         {filteredCountries.length} results
       </p>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-          gap: 24,
-          marginTop: 24,
-        }}
-      >
+      {/* Countries Grid */}
+      <div className="countries-grid">
         {filteredCountries.slice(0, 20).map((country) => (
           <CountryCard key={country.cca3} country={country} />
         ))}
@@ -88,6 +80,7 @@ export default function HomePage() {
     </div>
   );
 }
+
 
 
 
