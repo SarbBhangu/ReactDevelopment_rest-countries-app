@@ -1,17 +1,16 @@
-import { Routes, Route } from "react-router-dom";
-import HomePage from "./pages/HomePage";
-import CountryDetailPage from "./pages/CountryDetailPage";
-import NotFoundPage from "./pages/NotFoundPage";
+import { Outlet } from "react-router-dom";
+import Header from "./components/Header";
 
-function App() {
+export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/country/:code" element={<CountryDetailPage />} />
-      <Route path="*" element={<NotFoundPage />} />
-    </Routes>
+    <div>
+      <Header />
+
+      <main style={{ padding: "24px" }}>
+        <Outlet />
+      </main>
+    </div>
   );
 }
 
-export default App;
 
